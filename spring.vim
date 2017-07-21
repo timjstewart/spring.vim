@@ -18,7 +18,6 @@ augroup spring
     autocmd BufNewFile */controller/*Controller.java     0r ~/spring/Controller.java       | call InitializeJavaFile()
     autocmd BufNewFile */repository/*Repository.java     0r ~/spring/Repository.java       | call InitializeJavaFile()
     autocmd BufNewFile */main/*/domain/*.java            0r ~/spring/Domain.java           | call InitializeJavaFile()
-    autocmd BufNewFile */domain/*Test.java               0r ~/spring/DomainTest.java       | call InitializeJavaFile()
     autocmd BufNewFile */test/*/utility/*Page.java       0r ~/spring/Page.java             | call InitializeJavaFile()
     autocmd BufNewFile */controller/*ControllerTest.java 0r ~/spring/ControllerTest.java   | call InitializeJavaFile()
     autocmd BufNewFile */repository/*RepositoryTest.java 0r ~/spring/RepositoryTest.java   | call InitializeJavaFile()
@@ -49,7 +48,6 @@ function! CreateService(resource, rootPackage)
 endfunction
 
 function! CreateDomain(resource, rootPackage)
-    call CreateJavaSourceFile(a:resource, 'test', a:rootPackage, 'domain', a:resource . 'Test.java')
     call CreateJavaSourceFile(a:resource, 'main', a:rootPackage, 'domain', a:resource . '.java')
 endfunction
 
@@ -103,12 +101,16 @@ function! CreateJavaProject(rootPackage, rootDir)
     " echom "Creating directory:" l:resDir
     call mkdir(l:resDir, 'p')
 
+    let l:noTestDirs = ['presentation', 'domain']
+
     for kind in ['main', 'test']
         for lang in ['java']
             for pkg in ['domain', 'repository', 'controller', 'service', 'eventing', 'utility', 'presentation']
-                let l:dir = a:rootDir . '/src/' . kind . '/'. lang . '/' . substitute(a:rootPackage, '\.', '/', 'g') . '/' . pkg
-                " echom "Creating directory:" l:dir
-                call mkdir(l:dir, 'p')
+                if kind != 'test' || index(l:noTestDirs, pkg) == -1
+                    let l:dir = a:rootDir . '/src/' . kind . '/'. lang . '/' . substitute(a:rootPackage, '\.', '/', 'g') . '/' . pkg
+                    " echom "Creating directory:" l:dir
+                    call mkdir(l:dir, 'p')
+                endif
             endfor
         endfor
     endfor
