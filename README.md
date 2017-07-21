@@ -8,7 +8,23 @@ I'm trying to learn the key Annotations used by Spring Boot.
 
 #### @Entity
 
+Example:
+
+    @Entity
+    public class Report
+    {
+    }
+
 #### @Table
+
+Example:
+
+    @Entity
+    @Table(name = "ratings", uniqueConstraints = @UniqueConstraint(columnNames = {
+        "car_uuid", "user_uuid"
+    }))
+    public class Rating {
+    }
 
 Properties:
 
@@ -17,6 +33,16 @@ Properties:
  - schema
 
 ### Field/Method Annotations
+
+Example:
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
+    public UUID getUuid()
+    {
+        return uuid;
+    }
 
 It looks like putting these on the field getter methods works nicely.
 
@@ -33,15 +59,31 @@ Properties:
 
 #### @Column
 
+Useful for specifying that a column cannot contain any nulls.
+
+
+Example:
+
+    @Column(nullable = false)
+    public int getStars()
+    {
+        return stars;
+    }
+
 Properties:
 
- - unique - true iff the column is a unique key.
- - nullable - true iff the column can contain nulls.
- - updatable - true iff the column should be included in UPDATE statements
+ - name - the name of the column.
+ - updatable - true iff this column is included in UPDATE statements.
+ - insertable - true iff this column is included in INSERT statements.
+ - nullable - true iff the foreign key can be null (defaults to false)
  - length (for string columns only)
  - precision (for decimal columns only)
 
 #### @ManyToOne
+
+Example:
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
 
 Properties:
 
@@ -52,6 +94,14 @@ Properties:
 #### @JoinColumn
 
 For specifying how to join the two entities.
+
+Example:
+
+    @JoinColumn(name = "car_uuid", foreignKey = @ForeignKey(name = "CAR_UUID_FK"))
+    public Car getCar()
+    {
+        return car;
+    }
 
 Properties:
 
@@ -66,22 +116,17 @@ Properties:
 This can be useful to avoid foreign key constraint violations when deleting
 entities that are in relationships.
 
+Example:
+
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    public Car getCar()
+    {
+        return car;
+    }
+
 Properties:
 
  - action - either CASCADE or NO_ACTION
-
-#### @Column
-
-Useful for specifying that a column cannot contain any nulls.
-
-Properties:
-
- - name - the name of the column.
- - updatable - true iff this column is included in UPDATE statements.
- - insertable - true iff this column is included in INSERT statements.
- - nullable - true iff the foreign key can be null (defaults to false)
- - length (for string columns only)
- - precision (for decimal columns only)
 
 # Repository Classes
 
@@ -122,13 +167,50 @@ Properties:
 
  ## Parameter Level
 
+ ### @RequestParam
+
+ Provides a way of accessing query string parameters.
+
+ Example:
+
+    @RequestMapping(path = "/cars", method = RequestMethod.GET)
+    public Page<Car> getMany(@RequestParam(name = "year", required = false) Integer year)
+    {
+        if (year == null)
+        {
+        ...
+        }
+    }
+
+Properties:
+
+ - name - the name of the query string parameter
+ - required - whether or not the parameter is required
+ - defaultValue - which value should be used if the parameter is not supplied
+
  ### @PathVariable
 
  Provides a way to access parts of the request's path as parameters.
 
+ Example:
+
+    @RequestMapping(path = "/blogs/{id}", method = RequestMethod.GET)
+    public HttpEntity<Blog> getOne(@PathVariable UUID id)
+    {
+    ...
+    }
+
  ### @RequestBody
 
  Provides a way to access the request payload as an Domain object.
+
+ Example:
+
+    @RequestMapping(path = "/blogs/, method = RequestMethod.POST)
+    public HttpEntity<Blog> createOne(@RequestBody Blog blog)
+    {
+    ....
+    }
 
 # Test Classes
 
