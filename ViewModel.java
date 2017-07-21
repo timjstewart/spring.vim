@@ -2,9 +2,10 @@ import java.util.Objects;
 
 import PACK.domain.Xxx;
 
-import org.springframework.hateoas.ResourceSupport;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.ResourceSupport;
 
 public class XxxViewModel extends ResourceSupport
 {
@@ -65,6 +66,7 @@ public class XxxViewModel extends ResourceSupport
      *
      * @return the Xxx resource.
      */
+    @JsonIgnore
     public Xxx getResource()
     {
         return xxx;

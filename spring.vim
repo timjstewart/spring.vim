@@ -8,13 +8,14 @@
 " 3. :call CreateSpringProject('com.timjstewart')
 "
 " To create resources:
-" 1. :call CreateResource('Player')
+" 1. :call CreateResource('Player', 'com.timjstewart')
 " 2. Add fields to domain object.
 " 3. Add tests to domain tests and controller tests.
 "
 augroup spring
     au!
     autocmd BufNewFile Application.java                  0r ~/spring/Application.java      | call InitializeJavaFile()
+    autocmd BufNewFile SwaggerConfig.java                0r ~/spring/SwaggerConfig.java    | call InitializeJavaFile()
     autocmd BufNewFile */controller/*Controller.java     0r ~/spring/Controller.java       | call InitializeJavaFile()
     autocmd BufNewFile */repository/*Repository.java     0r ~/spring/Repository.java       | call InitializeJavaFile()
     autocmd BufNewFile */main/*/domain/*.java            0r ~/spring/Domain.java           | call InitializeJavaFile()
@@ -87,6 +88,9 @@ function! CreateSpringProject(rootPackage)
 
     echom "Creating Application.java"
     execute 'e ' . GetPackageDirectory('main', a:rootPackage, '') . 'Application.java'
+
+    echom "Creating SwaggerConfig.java"
+    execute 'e ' . GetPackageDirectory('main', a:rootPackage, 'configuration') . '/SwaggerConfig.java'
 endfunction
 
 function! CreateJavaProject(rootPackage, rootDir)
@@ -101,11 +105,11 @@ function! CreateJavaProject(rootPackage, rootDir)
     " echom "Creating directory:" l:resDir
     call mkdir(l:resDir, 'p')
 
-    let l:noTestDirs = ['presentation', 'domain']
+    let l:noTestDirs = ['presentation', 'domain', 'configuration']
 
     for kind in ['main', 'test']
         for lang in ['java']
-            for pkg in ['domain', 'repository', 'controller', 'service', 'eventing', 'utility', 'presentation']
+            for pkg in ['domain', 'repository', 'controller', 'service', 'eventing', 'utility', 'presentation', 'configuration']
                 if kind != 'test' || index(l:noTestDirs, pkg) == -1
                     let l:dir = a:rootDir . '/src/' . kind . '/'. lang . '/' . substitute(a:rootPackage, '\.', '/', 'g') . '/' . pkg
                     " echom "Creating directory:" l:dir
