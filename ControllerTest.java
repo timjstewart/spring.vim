@@ -16,7 +16,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 public class XxxControllerTest {
 
     @Autowired
-    private XxxRepository repository;
+    private XxxRepository xxxRepository;
 
     @Autowired
     private TestRestTemplate template;
@@ -27,7 +27,7 @@ public class XxxControllerTest {
         final Xxx created = template.postForObject(XxxController.ROUTE_COLLECTIVE, new Xxx(), Xxx.class);
 
         // Act
-        final Xxx found = repository.findOne(created.getUuid());
+        final Xxx found = xxxRepository.findOne(created.getUuid());
 
         // Assert
         assertThat(found).isNotNull();
@@ -36,20 +36,20 @@ public class XxxControllerTest {
     @Test
     public void canDeleteXxx() {
         // Arrange
-        final Xxx created = repository.save(new Xxx());
+        final Xxx created = xxxRepository.save(new Xxx());
 
         // Act
         template.delete(XxxController.ROUTE_SINGLE, created.getUuid());
 
         // Assert
-        final Xxx found = repository.findOne(created.getUuid());
+        final Xxx found = xxxRepository.findOne(created.getUuid());
         assertThat(found).isNull();
     }
 
     @Test
     public void canGetXxx() {
         // Arrange
-        final Xxx created = repository.save(new Xxx());
+        final Xxx created = xxxRepository.save(new Xxx());
 
         // Act
         final Xxx found = template.getForObject(XxxController.ROUTE_SINGLE, Xxx.class, created.getUuid());
@@ -61,14 +61,14 @@ public class XxxControllerTest {
     @Test
     public void canUpdateXxx() {
         // Arrange
-        final Xxx created = repository.save(new Xxx());
+        final Xxx created = xxxRepository.save(new Xxx());
 
         // Act
         // TODO: Modify created...
         template.put(XxxController.ROUTE_SINGLE, created, created.getUuid());
 
         // Assert
-        final Xxx found = repository.findOne(created.getUuid());
+        final Xxx found = xxxRepository.findOne(created.getUuid());
         assertThat(found).isEqualTo(created);
     }
 }

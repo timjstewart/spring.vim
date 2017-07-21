@@ -12,46 +12,45 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class XxxRepositoryTest
 {
+    /// The resource that this test will operate on.
+    private Xxx xxx;
 
     @Autowired
-    private XxxRepository repository;
+    private XxxRepository xxxRepository;
 
     @Before
     public void setUp()
     {
-        repository.deleteAll();
+        // Arrange
+        final Xxx newXxx = new Xxx();
+
+        xxx = xxxRepository.save(newXxx);
     }
 
     @Test
     public void canCreateXxx()
     {
-        // Arrange
-        final Xxx xxx = new Xxx();
-
-        // Act
-        final Xxx createdXxx = repository.save(xxx);
+        // Act was performed in the setUp() method.
 
         // Assert
-        final Xxx foundXxx = repository.findOne(createdXxx.getUuid());
+        final Xxx foundXxx = xxxRepository.findOne(xxx.getUuid());
         assertThat(foundXxx).isNotNull();
-        assertThat(foundXxx).isEqualTo(createdXxx);
+        assertThat(foundXxx).isEqualTo(xxx);
     }
 
     @Test
     public void canUpdateXxx()
     {
         // Arrange
-        final Xxx xxx = new Xxx();
-        final Xxx createdXxx = repository.save(xxx);
-        final Xxx foundXxx = repository.findOne(createdXxx.getUuid());
+        final Xxx foundXxx = xxxRepository.findOne(xxx.getUuid());
 
         // Act
         // TODO: Update Xxx
         // foundXxx.set();
-        repository.save(foundXxx);
+        xxxRepository.save(foundXxx);
 
         // Assert
-        final Xxx updatedXxx = repository.findOne(createdXxx.getUuid());
+        final Xxx updatedXxx = xxxRepository.findOne(xxx.getUuid());
         assertThat(updatedXxx).isNotNull();
         assertThat(updatedXxx).isEqualTo(foundXxx);
     }
@@ -59,15 +58,11 @@ public class XxxRepositoryTest
     @Test
     public void canDeleteXxx()
     {
-        // Arrange
-        final Xxx xxx = new Xxx();
-        final Xxx createdXxx = repository.save(xxx);
-
         // Act
-        repository.delete(createdXxx.getUuid());
+        xxxRepository.delete(xxx.getUuid());
 
         // Assert
-        final Xxx foundXxx = repository.findOne(createdXxx.getUuid());
+        final Xxx foundXxx = xxxRepository.findOne(xxx.getUuid());
         assertThat(foundXxx).isNull();
     }
 }

@@ -99,7 +99,7 @@ function! CreateJavaProject(rootPackage, rootDir)
 
     for kind in ['main', 'test']
         for lang in ['java']
-            for pkg in ['domain', 'repository', 'controller', 'service', 'eventing', 'utility']
+            for pkg in ['domain', 'repository', 'controller', 'service', 'eventing', 'utility', 'presentation']
                 let l:dir = a:rootDir . '/src/' . kind . '/'. lang . '/' . substitute(a:rootPackage, '\.', '/', 'g') . '/' . pkg
                 " echom "Creating directory:" l:dir
                 call mkdir(l:dir, 'p')
