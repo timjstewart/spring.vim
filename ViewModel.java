@@ -30,7 +30,7 @@ public class XxxViewModel extends ResourceSupport
     /**
      * Converts a page of Xxx objects into a page of XxxViewModel objects.
      *
-     * @param xxx the Xxx object to convert.
+     * @param page the Page of Xxx objects to convert.
      *
      * @return the XxxViewModel.
      */

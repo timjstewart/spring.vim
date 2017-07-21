@@ -2,6 +2,11 @@
 
 I'm trying to learn the key Annotations used by Spring Boot.
 
+## Resources
+
+ - [Hibernate User Guide](http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html)
+ - [Spring Data JPA Reference](http://docs.spring.io/spring-data/jpa/docs/1.11.4.RELEASE/reference/html/)
+
 ## Domain Objects
 
 ### Class Annotations
@@ -44,7 +49,10 @@ Example:
         return uuid;
     }
 
-It looks like putting these on the field getter methods works nicely.
+It looks like putting these on the field getter methods works nicely.  There is
+a significant difference between using field based and property based access.
+Field based access is more flexible because you don't have to mark other
+methods on the entity as being @Transient.
 
 #### @Id
 
@@ -60,7 +68,6 @@ Properties:
 #### @Column
 
 Useful for specifying that a column cannot contain any nulls.
-
 
 Example:
 
@@ -127,6 +134,44 @@ Example:
 Properties:
 
  - action - either CASCADE or NO_ACTION
+
+#### @OrderBy
+
+Orders related objects.
+
+Properties:
+
+- value - the field value to order by.  ASC or DESC can be specified as a
+  suffix.  If no value is supplied, the primary key of the relation is used.
+
+Example:
+
+    @Entity(name = "Person")
+    public class Person {
+        @OneToMany(cascade = CascadeType.ALL)
+        @OrderBy("area_code ASC, number DESC")
+        private List<Phone> phones;
+    }
+
+#### @NaturalId
+
+If an entity has a natural id, part of the object that is unique, it can help
+to tell Hibernate about it.
+
+Example:
+
+    @Entity(name = "Employee")
+    public static class Employee {
+        @Id
+        private Long id;
+
+        @NaturalId
+        private String username;
+    }
+
+#### @Transient
+
+Excludes a field from being part of the entities persistent state.
 
 # Repository Classes
 
