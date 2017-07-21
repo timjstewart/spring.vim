@@ -1,6 +1,7 @@
 import PACK.domain.Xxx;
 import PACK.presentation.XxxViewModel;
 import PACK.repository.XxxRepository;
+import PACK.utility.XxxPage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,7 +51,7 @@ public class XxxControllerTest {
     }
 
     @Test
-    public void canGetXxx() {
+    public void canGetOneXxx() {
         // Arrange
         final Xxx created = xxxRepository.save(new Xxx());
 
@@ -60,6 +61,21 @@ public class XxxControllerTest {
 
         // Assert
         assertThat(found).isNotNull();
+    }
+
+    @Test
+    public void canGetMultipleXxxs() {
+        // Arrange
+        final int xxxCount = template.getForObject(XxxController.ROUTE_COLLECTIVE, XxxPage.class).getTotalElements();
+
+        final Xxx newXxx = new Xxx();
+        final Xxx created = xxxRepository.save(newXxx);
+
+        // Act
+        final XxxPage xxxs = template.getForObject(XxxController.ROUTE_COLLECTIVE, XxxPage.class);
+
+        // Assert
+        assertThat(xxxs.getTotalElements()).isEqualTo(xxxCount + 1);
     }
 
     @Test

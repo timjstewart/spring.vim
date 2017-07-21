@@ -1,12 +1,10 @@
-import org.springframework.hateoas.ResourceSupport;
-
-import PACK.domain.Xxx;
+import PACK.presentation.XxxViewModel;
 import java.util.ArrayList;
 
 public class XxxPage
 {
     private int totalElements;
-    private ArrayList<Xxx> content;
+    private ArrayList<XxxViewModel> content;
 
     public int getTotalElements()
     {
@@ -18,12 +16,12 @@ public class XxxPage
         this.totalElements = totalElements;
     }
 
-    public ArrayList<Xxx> getContent()
+    public ArrayList<XxxViewModel> getContent()
     {
         return content;
     }
 
-    public void setContent(final ArrayList<Xxx> content)
+    public void setContent(final ArrayList<XxxViewModel> content)
     {
         this.content = content;
     }
