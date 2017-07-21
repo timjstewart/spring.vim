@@ -1,0 +1,71 @@
+# ## Setter and Getter Methods
+# snippet col
+#     private $2 ${3:};
+# 
+# 	${1:public} void set${3:}(${2:String} ${0:}){
+# 		this.$4 = $4;
+# 	}
+# 
+# 	${1:public} ${2:String} get${3:}(){
+# 		return this.${0:};
+# 	}
+# ## Annotations
+# snippet before
+# 	@Before
+# 	static void ${1:intercept}(${2:args}) { ${0} }
+# snippet mm
+# 	@ManyToMany
+# 	${0}
+# #
+# snippet mo
+# 	@ManyToOne
+# 	${0}
+# #
+# snippet om
+# 	@OneToMany${1:(cascade=CascadeType.ALL)}
+# 	${0}
+# #
+# snippet oo
+# 	@OneToOne
+# 	${1}
+#
+priority -50
+
+global !p
+def camelCase(word):
+	if not word: return ''
+	return word[0].upper() + word[1:]
+
+def mixedCase(word):
+	if not word: return ''
+	return word[0].lower() + word[1:]
+
+def upperCase(word):
+	if not word: return ''
+	return word.upper()
+
+endglobal
+
+snippet col "JPA Column"
+private ${1:String} ${2:Name};`!p snip.rv += "\n"`
+@Column(name = "${3:ColumnName}", nullable = ${4:false})
+public void set`!p snip.rv = camelCase(t[2])`(final $1 `!p snip.rv = mixedCase(t[2])`) {
+	this.`!p snip.rv = mixedCase(t[2])` = `!p snip.rv = mixedCase(t[2])`;
+}`!p snip.rv += "\n"`
+public $1 get`!p snip.rv = camelCase(t[2])`() {
+	return `!p snip.rv = mixedCase(t[2])`;
+}
+endsnippet
+
+snippet rel "JPA Relation"
+private ${1:String} ${2:Name};`!p snip.rv += "\n"`
+@${3:ManyToOne}(optional = ${4:false}, fetch = FetchType.${5:EAGER})
+@JoinColumn(name = "`!p snip.rv = t[2]`_id", foreignKey = @ForeignKey(name = "`!p snip.rv = upperCase(t[2])`_ID_FK"))
+@OnDelete(action = OnDeleteAction.${6:CASCADE})
+public void set`!p snip.rv = camelCase(t[2])`(final $1 `!p snip.rv = mixedCase(t[2])`) {
+	this.`!p snip.rv = mixedCase(t[2])` = `!p snip.rv = mixedCase(t[2])`;
+}`!p snip.rv += "\n"`
+public $1 get`!p snip.rv = camelCase(t[2])`() {
+	return `!p snip.rv = mixedCase(t[2])`;
+}
+endsnippet

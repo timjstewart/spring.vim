@@ -22,6 +22,7 @@ augroup spring
     autocmd BufNewFile */test/*/utility/*Page.java       0r ~/spring/Page.java             | call InitializeJavaFile()
     autocmd BufNewFile */controller/*ControllerTest.java 0r ~/spring/ControllerTest.java   | call InitializeJavaFile()
     autocmd BufNewFile */repository/*RepositoryTest.java 0r ~/spring/RepositoryTest.java   | call InitializeJavaFile()
+    autocmd BufNewFile */presentation/*ViewModel.java    0r ~/spring/ViewModel.java        | call InitializeJavaFile()
     autocmd BufNewFile pom.xml                           0r ~/spring/Pom.xml               | silent write!
     autocmd BufNewFile application.properties            0r ~/spring/properties.properties | silent write!
 augroup END
@@ -29,7 +30,12 @@ augroup END
 function! CreateResource(resource, rootPackage)
     call CreateRepository(a:resource, a:rootPackage)
     call CreateController(a:resource, a:rootPackage)
+    call CreateViewModel(a:resource, a:rootPackage)
     call CreateDomain(a:resource, a:rootPackage)
+endfunction
+
+function! CreateViewModel(resource, rootPackage)
+    call CreateJavaSourceFile(a:resource, 'main', a:rootPackage, 'presentation', a:resource . 'ViewModel.java')
 endfunction
 
 function! CreateRepository(resource, rootPackage)

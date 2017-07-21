@@ -1,4 +1,5 @@
 import PACK.domain.Xxx;
+import PACK.presentation.XxxViewModel;
 import PACK.repository.XxxRepository;
 
 import java.net.URI;
@@ -54,9 +55,9 @@ public class XxxController
      * Route that GETs many Xxx resources.  Supports paging and sorting.
      */
     @RequestMapping(path = ROUTE_COLLECTIVE, method = RequestMethod.GET)
-    public Page<Xxx> getMany(final Pageable pageable)
+    public Page<XxxViewModel> getMany(final Pageable pageable)
     {
-        return addLinks(xxxRepository.findAll(pageable));
+        return addLinks(XxxViewModel.fromResources(xxxRepository.findAll(pageable)));
     }
 
     /**
@@ -65,7 +66,7 @@ public class XxxController
      * @param id the id of the Xxx.
      */
     @RequestMapping(path = ROUTE_SINGLE, method = RequestMethod.GET)
-    public HttpEntity<Xxx> getOne(@PathVariable final UUID id)
+    public HttpEntity<XxxViewModel> getOne(@PathVariable final UUID id)
     {
         final Xxx xxx = xxxRepository.findOne(id);
         if (xxx == null)
@@ -74,7 +75,7 @@ public class XxxController
         }
         else
         {
-            return new ResponseEntity<>(addLinks(xxx), HttpStatus.OK);
+            return new ResponseEntity<>(addLinks(XxxViewModel.fromResource(xxx)), HttpStatus.OK);
         }
     }
 
@@ -98,28 +99,29 @@ public class XxxController
     }
 
     @RequestMapping(path = ROUTE_SINGLE, method = RequestMethod.PUT)
-    public HttpEntity<Xxx> updateOne(@RequestBody final Xxx resource)
+    public HttpEntity<XxxViewModel> updateOne(@RequestBody final XxxViewModel model)
     {
-        final Xxx xxx = xxxRepository.save(resource);
-        return new ResponseEntity<>(addLinks(xxx), HttpStatus.OK);
+        final Xxx xxx = xxxRepository.save(model.getResource());
+        return new ResponseEntity<>(addLinks(XxxViewModel.fromResource(xxx)), HttpStatus.OK);
     }
 
     @RequestMapping(path = ROUTE_COLLECTIVE, method = RequestMethod.POST)
-    public HttpEntity<Xxx> createOne(@RequestBody final Xxx resource) throws URISyntaxException
+    public HttpEntity<XxxViewModel> createOne(@RequestBody final XxxViewModel model) throws URISyntaxException
     {
-        final Xxx xxx = xxxRepository.save(resource);
-        return new ResponseEntity<>(addLinks(xxx), getCreatedHeaders(xxx), HttpStatus.CREATED);
+        final Xxx xxx = xxxRepository.save(model.getResource());
+        return new ResponseEntity<>(addLinks(XxxViewModel.fromResource(xxx)),
+                getCreatedHeaders(xxx), HttpStatus.CREATED);
     }
 
-    private Page<Xxx> addLinks(final Page<Xxx> xxxPage)
+    private Page<XxxViewModel> addLinks(final Page<XxxViewModel> xxxPage)
     {
         return xxxPage.map(this::addLinks);
     }
 
-    private Xxx addLinks(final Xxx xxx)
+    private XxxViewModel addLinks(final XxxViewModel model)
     {
-        xxx.add(linkTo(methodOn(XxxController.class).getOne(xxx.getUuid())).withSelfRel());
-        return xxx;
+        model.add(linkTo(methodOn(XxxController.class).getOne(model.getResource().getUuid())).withSelfRel());
+        return model;
     }
 
     private HttpHeaders getCreatedHeaders(final Xxx xxx) throws URISyntaxException

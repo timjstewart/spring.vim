@@ -1,4 +1,5 @@
 import PACK.domain.Xxx;
+import PACK.presentation.XxxViewModel;
 import PACK.repository.XxxRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +25,12 @@ public class XxxControllerTest {
     @Test
     public void canCreateXxx() {
         // Arrange
-        final Xxx created = template.postForObject(XxxController.ROUTE_COLLECTIVE, new Xxx(), Xxx.class);
+        final Xxx newXxx = new Xxx();
+        final XxxViewModel created = template.postForObject(XxxController.ROUTE_COLLECTIVE,
+                XxxViewModel.fromResource(newXxx), XxxViewModel.class);
 
         // Act
-        final Xxx found = xxxRepository.findOne(created.getUuid());
+        final Xxx found = xxxRepository.findOne(created.getResource().getUuid());
 
         // Assert
         assertThat(found).isNotNull();
@@ -52,7 +55,8 @@ public class XxxControllerTest {
         final Xxx created = xxxRepository.save(new Xxx());
 
         // Act
-        final Xxx found = template.getForObject(XxxController.ROUTE_SINGLE, Xxx.class, created.getUuid());
+        final XxxViewModel found = template.getForObject(XxxController.ROUTE_SINGLE,
+                XxxViewModel.class, created.getUuid());
 
         // Assert
         assertThat(found).isNotNull();
@@ -65,7 +69,7 @@ public class XxxControllerTest {
 
         // Act
         // TODO: Modify created...
-        template.put(XxxController.ROUTE_SINGLE, created, created.getUuid());
+        template.put(XxxController.ROUTE_SINGLE, XxxViewModel.fromResource(created), created.getUuid());
 
         // Assert
         final Xxx found = xxxRepository.findOne(created.getUuid());
