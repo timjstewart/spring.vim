@@ -1,5 +1,7 @@
 # Spring Annotations
 
+I'm trying to learn the key Annotations used by Spring Boot.
+
 ## Domain Objects
 
 ### Class Annotations
@@ -106,6 +108,28 @@ Properties:
 
 ### @RestController
 
+## Method Level
+
+### @RequestMapping
+
+Properties:
+
+ - path - the request's path (variables are written in curly braces like {id})
+ - method - an array of HTTP methods (e.g. GET, POST, etc.)
+ - params - used to map requests based on query string parameters (e.g. myParam=myValue or myParam!=myValue)
+ - consumes - the media types that are supported
+ - produces - the media types that the client has said they will accept (e.g. Accept header)
+
+ ## Parameter Level
+
+ ### @PathVariable
+
+ Provides a way to access parts of the request's path as parameters.
+
+ ### @RequestBody
+
+ Provides a way to access the request payload as an Domain object.
+
 # Test Classes
 
 ## Class Level
@@ -118,4 +142,15 @@ Properties:
 
 ### @SpringBootTest
 
+Properties:
 
+ - webEnvironment - e.g. MOCK, RANDOM_PORT
+ - properties - zero or more key value pairs
+
+# Components
+
+## Class Level
+
+### @Component
+
+Makes the annotated class injectable.
