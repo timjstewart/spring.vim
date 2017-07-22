@@ -12,6 +12,14 @@
 " 2. Add fields to domain object.
 " 3. Add tests to domain tests and controller tests.
 "
+" Known Issues
+"
+" - The artifactId in the generated pom.xml file is not settable via the
+"   CreateSpringProject or CreateJavaProject functions.
+" - The groupId in the generate pom.xml file does not respect the groupId
+"   passed to the CreateSpringProject or CreateJavaProject functions.
+" - Code generation does not properly handle pluralization of words.
+"
 augroup spring
     au!
     autocmd BufNewFile Application.java                  0r ~/spring/Application.java      | call InitializeJavaFile()
@@ -86,11 +94,11 @@ function! CreateSpringProject(rootPackage)
     echom "Creating application properties file:" l:propsFile
     execute 'e ' . l:propsFile
 
-    echom "Creating Application.java"
-    execute 'e ' . GetPackageDirectory('main', a:rootPackage, '') . 'Application.java'
-
     echom "Creating SwaggerConfig.java"
     execute 'e ' . GetPackageDirectory('main', a:rootPackage, 'configuration') . '/SwaggerConfig.java'
+
+    echom "Creating Application.java"
+    execute 'e ' . GetPackageDirectory('main', a:rootPackage, '') . 'Application.java'
 endfunction
 
 function! CreateJavaProject(rootPackage, rootDir)
