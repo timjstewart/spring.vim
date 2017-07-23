@@ -28,13 +28,13 @@ endsnippet
 
 snippet rel "JPA Relation"
 private ${1:String} ${2:Name};`!p snip.rv += "\n"`
-@${3:ManyToOne}(optional = ${4:false}, fetch = FetchType.${5:EAGER})
+@${3:ManyToOne}(optional = ${4:false}, fetch = FetchType.${5:EAGER}, length = ${6:LENGTH})
 @JoinColumn(name = "`!p snip.rv = t[2]`_id", foreignKey = @ForeignKey(name = "`!p snip.rv = upperCase(t[2])`_ID_FK"))
-@OnDelete(action = OnDeleteAction.${6:CASCADE})
-public void set`!p snip.rv = camelCase(t[2])`(final $1 `!p snip.rv = mixedCase(t[2])`) {
-	this.`!p snip.rv = mixedCase(t[2])` = `!p snip.rv = mixedCase(t[2])`;
-}`!p snip.rv += "\n"`
+@OnDelete(action = OnDeleteAction.${7:CASCADE})
 public $1 get`!p snip.rv = camelCase(t[2])`() {
 	return `!p snip.rv = mixedCase(t[2])`;
+}`!p snip.rv += "\n"`
+public void set`!p snip.rv = camelCase(t[2])`(final $1 `!p snip.rv = mixedCase(t[2])`) {
+	this.`!p snip.rv = mixedCase(t[2])` = `!p snip.rv = mixedCase(t[2])`;
 }
 endsnippet
