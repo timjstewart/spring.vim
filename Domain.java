@@ -39,7 +39,7 @@ public class Xxx extends ResourceSupport
         this.uuid = uuid;
     }
 
-       @Column(name = "createdAt", nullable = false)
+    @Column(name = "createdAt", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getCreatedAt()
     {
